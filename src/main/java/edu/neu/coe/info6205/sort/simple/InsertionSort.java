@@ -7,7 +7,7 @@ import edu.neu.coe.info6205.sort.BaseHelper;
 import edu.neu.coe.info6205.sort.Helper;
 import edu.neu.coe.info6205.sort.SortWithHelper;
 import edu.neu.coe.info6205.util.Config;
-
+import java.util.Arrays;
 public class InsertionSort<X extends Comparable<X>> extends SortWithHelper<X> {
 
     /**
@@ -51,10 +51,22 @@ public class InsertionSort<X extends Comparable<X>> extends SortWithHelper<X> {
      * @param from the index of the first element to sort
      * @param to   the index of the first element not to sort
      */
-    public void sort(X[] xs, int from, int to) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void sort(X[] xs, int from, int to) {
         final Helper<X> helper = getHelper();
-
         // TO BE IMPLEMENTED
+        
+        for(int i = from ; i < to ; i++) {
+        	for(int j = i; j > from ; j--) {
+        		if(((Comparable)xs[j-1]).compareTo(xs[j]) > 0) {
+        			helper.swap(xs,j, j-1);
+        		}
+        		else {
+        			break;
+        		}
+        	}
+        }
+        
     }
 
     /**

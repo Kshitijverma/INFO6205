@@ -4,10 +4,17 @@
 
 package edu.neu.coe.info6205.util;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.math.*;
+
+import java.util.Random;
+import edu.neu.coe.info6205.sort.simple.InsertionSort;
 
 import static edu.neu.coe.info6205.util.Utilities.formatWhole;
 
@@ -125,4 +132,156 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+    
+    /**
+     * Testing the implementation of Timer Class with Insertion Sort
+     */
+	public static void main(String[] args) {
+        
+    	//Instantiate the insertion sort class
+    	InsertionSort ins_sort = new InsertionSort();
+   
+    	//Instantiate Benchmark_Timer class to perform Benchmark Test
+    	Benchmark_Timer<Integer[]> bTimer = new Benchmark_Timer<>("Benchmark Test", null, (x) -> ins_sort.sort(x, 0, x.length), null);
+    	
+    	//Create a randomly ordered array and run benchmark test
+    	for(int i = 500; i < 12000; i = i*2) {
+    			
+    		int j = i;
+    		
+    		//Provide a randomly ordered array of size j to supplier
+    		Supplier<Integer[]> supplier = new Supplier<Integer[]>() {
+
+				@Override
+				public Integer[] get() {
+					Random random = new Random();
+			    	Integer[] arr = new Integer[j];
+			    	
+			    	//Generate the random array
+			    	for(int k = 0; k < j; k++) {
+			    		arr[k] = random.nextInt(j);
+			    	}
+			    	return arr;
+				}	
+    		};
+    		
+    		//Time taken by insertion sort to run 10 times
+        	double time = bTimer.runFromSupplier(supplier, 10);
+
+        	System.out.println("Value of N: " + i + " Order Situation- Randomly Ordered" + " Time Taken: " + time);
+    	}
+    	
+    	System.out.println("-------------------------------------------------------------------------------------------------------------------------");
+    	
+    	//Create an ordered array and run benchmark test
+    	for(int i = 500; i < 10000; i = i*2) {
+    		
+    		int j = i; 
+    		
+    		//Provide an ordered array of size j to supplier
+    		Supplier<Integer[]> supplier = new Supplier<Integer[]>() {
+
+				@Override
+				public Integer[] get() {
+					Random random = new Random();
+			    	Integer[] arr = new Integer[j];
+			    	
+			    	//Generate the array
+			    	for(int k = 0; k < j; k++) {
+			    		arr[k] = random.nextInt(j*100);
+			    	}
+			    	
+			    	//Sort the array 
+			    	Arrays.sort(arr);
+			    	return arr;
+			    }
+    			
+    		};
+    		
+    		//Time taken by insertion sort to run 10 times
+        	double time = bTimer.runFromSupplier(supplier, 10);
+
+        	System.out.println("Value of N: " + i + " Order Situation- Ordered" + " Time Taken: " + time);
+    	
+    	}	
+    	
+    	System.out.println("-------------------------------------------------------------------------------------------------------------------------");
+        	
+    	//Create a partially array and run benchmark test
+    	for(int i = 500; i < 10000; i = i*2) {
+    		int j = i; 
+    		
+    		//Provide the array of size j to supplier
+    		Supplier<Integer[]> supplier = new Supplier<Integer[]>() {
+
+				@Override
+				public Integer[] get() {
+					Random random = new Random();
+			    	Integer[] arr = new Integer[j];
+			    	
+			    	//Generate the array
+			    	for(int k = 0; k < j; k++) {
+			    		arr[k] = random.nextInt(j*100);
+			    	}
+			    	
+			    	//Sort the array
+			    	Arrays.sort(arr);
+			    	
+			    	//Rearrange half the array elements
+			    	int rearrange = (int) (0.5*j);
+			    	
+			    	//Generate index to rearrange the array
+			    	for(int i = 0; i < rearrange; i++) {
+			    		int index = random.nextInt(j);
+			    		arr[index] = random.nextInt(j*100);
+			    	}
+			 
+			    	return arr;
+				}
+    			
+    		};
+    		
+    		//Time taken by insertion sort to run 10 times
+        	double time = bTimer.runFromSupplier(supplier, 10);
+
+        	System.out.println("Value of N: " + i + " Order Situation- Partially Ordered" + " Time Taken: " + time);
+    	
+    	}
+    	
+    	System.out.println("-------------------------------------------------------------------------------------------------------------------------");
+    	
+    	//Create a reverse ordered array and run benchmark test
+    	for(int i = 500; i < 10000; i = i*2) {
+    		int j = i; 
+    		
+    		//Provide the array of size j to supplier
+    		Supplier<Integer[]> supplier = new Supplier<Integer[]>() {
+
+				@Override
+				public Integer[] get() {
+					Random random = new Random();
+			    	Integer[] arr = new Integer[j];
+			    	
+			    	//Generate the array
+			    	for(int k = 0; k < j; k++) {
+			    		arr[k] = random.nextInt(j);
+			    	}
+			    	
+			    	//Sort the array in reverse manner
+			    	Arrays.sort(arr, Collections.reverseOrder());
+			    	return arr;
+				}
+    			
+    		};
+    		
+    		//Time taken by insertion sort to run 10 times
+        	double time = bTimer.runFromSupplier(supplier, 10);
+
+        	System.out.println("Value of N: " + i + " Order Situation- Reverse Ordered" + " Time Taken: " + time);
+    	}
+    	
+    	
+    	
+    }
 }
+

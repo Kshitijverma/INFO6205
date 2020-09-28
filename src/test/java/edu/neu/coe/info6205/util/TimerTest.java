@@ -96,13 +96,13 @@ public class TimerTest {
     @Test
     public void testRepeat1() {
         final Timer timer = new Timer();
-        final double mean = timer.repeat(10, () -> {
+        final double mean = timer.repeat(20, () -> {
             GoToSleep(HUNDREDTH, 0);
             return null;
         });
-        assertEquals(10, new PrivateMethodTester(timer).invokePrivate("getLaps"));
+        assertEquals(20, new PrivateMethodTester(timer).invokePrivate("getLaps"));
         assertEquals(TENTH_DOUBLE / 10, mean, 6);
-        assertEquals(10, run);
+        assertEquals(20, run);
         assertEquals(0, pre);
         assertEquals(0, post);
     }

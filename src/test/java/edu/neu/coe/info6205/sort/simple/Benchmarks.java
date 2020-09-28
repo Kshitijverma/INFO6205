@@ -74,13 +74,13 @@ public class Benchmarks {
         runBenchmark(description, sort, helper);
     }
 
-    @Test
-    public void testSelectionSortBenchmark() {
-        String description = "Selection sort";
-        Helper<Integer> helper = new BaseHelper<>(description, N);
-        final GenericSort<Integer> sort = new SelectionSort<>(helper);
-        runBenchmark(description, sort, helper);
-    }
+//    @Test
+//    public void testSelectionSortBenchmark() {
+//        String description = "Selection sort";
+//        Helper<Integer> helper = new BaseHelper<>(description, N);
+//        final GenericSort<Integer> sort = new SelectionSort<>(helper);
+//        runBenchmark(description, sort, helper);
+//    }
 
     @Test
     public void testShellSortBenchmark() {
