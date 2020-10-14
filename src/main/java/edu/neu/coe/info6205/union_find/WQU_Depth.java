@@ -3,12 +3,13 @@
  */
 package edu.neu.coe.info6205.union_find;
 
+
 /**
- * Weighted Quick Union with Path Compression
+ * Weighted Quick Union storing depth
  */
-public class WQUPC {
-    private final int[] parent;   // parent[i] = parent of i
-    private final int[] size;   // size[i] = size of subtree rooted at i
+public class WQU_Depth {
+    private int[] parent;   // parent[i] = parent of i
+    private int[] depth;   // depth[i] = depth of subtree rooted at i
     private int count;  // number of components
 
     /**
@@ -19,19 +20,20 @@ public class WQUPC {
      * @param n the number of sites
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public WQUPC(int n) {
+    public WQU_Depth(int n) {
         count = n;
         parent = new int[n];
-        size = new int[n];
+        depth = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
-            size[i] = 1;
+            depth[i] = 0;
         }
     }
 
+
     public void show() {
         for (int i = 0; i < parent.length; i++) {
-            System.out.printf("%d: %d, %d\n", i, parent[i], size[i]);
+            System.out.printf("%d: %d, %d\n", i, parent[i], depth[i]);
         }
     }
 
@@ -44,6 +46,7 @@ public class WQUPC {
         return count;
     }
 
+    
     /**
      * Returns the component identifier for the component containing site {@code p}.
      *
@@ -95,15 +98,22 @@ public class WQUPC {
         int rootQ = find(q);
         if (rootP == rootQ) return;
         // make smaller root point to larger one
-        if (size[rootP] < size[rootQ]) {
+        if (depth[rootP] < depth[rootQ]) {
             parent[rootP] = rootQ;
-            size[rootQ] += size[rootP];
+        } else if (depth[rootP] > depth[rootQ]) {
+            parent[rootQ] = rootP;
         } else {
             parent[rootQ] = rootP;
-            size[rootP] += size[rootQ];
+            depth[rootP]++;
         }
         count--;
     }
-
-    
+    public int getMaximumDepth() {
+        int result = 0;
+        for (int i = 0; i < depth.length; i++) {
+            result = Math.max(depth[i], result);
+        }
+        return result;
+    }
 }
+

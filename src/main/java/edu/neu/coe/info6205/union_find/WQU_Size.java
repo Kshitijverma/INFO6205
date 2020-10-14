@@ -4,9 +4,9 @@
 package edu.neu.coe.info6205.union_find;
 
 /**
- * Weighted Quick Union with Path Compression
+ * Weighted Quick Union storing size
  */
-public class WQUPC {
+public class WQU_Size {
     private final int[] parent;   // parent[i] = parent of i
     private final int[] size;   // size[i] = size of subtree rooted at i
     private int count;  // number of components
@@ -19,7 +19,7 @@ public class WQUPC {
      * @param n the number of sites
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public WQUPC(int n) {
+    public WQU_Size(int n) {
         count = n;
         parent = new int[n];
         size = new int[n];
@@ -105,5 +105,17 @@ public class WQUPC {
         count--;
     }
 
-    
+    public int getSize() {
+        int depth = 0;
+        for (int i = 0; i < size.length; i++) {
+            int temp = i, current = 0;
+            while (temp != parent[temp]) {
+                temp = parent[temp];
+                current++;
+            }
+
+            depth = Math.max(depth, current);
+        }
+        return depth;
+    }
 }

@@ -4,9 +4,9 @@
 package edu.neu.coe.info6205.union_find;
 
 /**
- * Weighted Quick Union with Path Compression
+ * Weighted Quick Union with Two Loop Path Compression
  */
-public class WQUPC {
+public class WQUPC_TwoLoop {
     private final int[] parent;   // parent[i] = parent of i
     private final int[] size;   // size[i] = size of subtree rooted at i
     private int count;  // number of components
@@ -19,7 +19,7 @@ public class WQUPC {
      * @param n the number of sites
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public WQUPC(int n) {
+    public WQUPC_TwoLoop(int n) {
         count = n;
         parent = new int[n];
         size = new int[n];
@@ -53,10 +53,16 @@ public class WQUPC {
      */
     public int find(int p) {
         validate(p);
-        while (p != parent[p]) {
-            p = parent[p];
+        int root = p;
+        while (root != parent[root]) {
+            root = parent[root];
         }
-        return p;
+        while (p != root) {
+            int temp = parent[p];
+            parent[p] = root;
+            p = temp;
+        }
+        return root;
     }
 
     // validate that p is a valid index
@@ -105,5 +111,18 @@ public class WQUPC {
         count--;
     }
 
-    
+    public int getDepth() {
+        int depth = 0;
+        for (int i = 0; i < size.length; i++) {
+            int temp = i, current = 0;
+            while (temp != parent[temp]) {
+                temp = parent[temp];
+                current++;
+            }
+
+            depth = Math.max(depth, current);
+        }
+        return depth;
+    }
+
 }
