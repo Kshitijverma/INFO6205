@@ -17,13 +17,19 @@ import java.util.concurrent.ForkJoinPool;
 public class Main {
 
     public static void main(String[] args) {
+    	int size = 2000000;
         processArgs(args);
-        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+        System.out.println("Size of Array: "+size);
+        int thread = 2;
+        while(thread < 128) {
+//        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(thread));
+        ForkJoinPool pool = new ForkJoinPool(thread);
+        System.out.println("Degree of parallelism: " + pool.getParallelism());
         Random random = new Random();
-        int[] array = new int[2000000];
+        int[] array = new int[size];
         ArrayList<Long> timeList = new ArrayList<>();
-        for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
+        for (int j = 0; j < 10; j++) {
+            ParSort.cutoff = 5000 * (j+1);
             // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
             long time;
             long startTime = System.currentTimeMillis();
@@ -39,8 +45,9 @@ public class Main {
             System.out.println("cutoff：" + (ParSort.cutoff) + "\t\t10times Time:" + time + "ms");
 
         }
+        
         try {
-            FileOutputStream fis = new FileOutputStream("./src/result.csv");
+            FileOutputStream fis = new FileOutputStream("./src/as5result/result"+size+"_"+thread+".csv");
             OutputStreamWriter isr = new OutputStreamWriter(fis);
             BufferedWriter bw = new BufferedWriter(isr);
             int j = 0;
@@ -54,6 +61,8 @@ public class Main {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        thread *= 2;
         }
     }
 
@@ -74,7 +83,7 @@ public class Main {
         if (x.equalsIgnoreCase("N")) setConfig(x, Integer.parseInt(y));
         else
             // TODO sort this out
-            if (x.equalsIgnoreCase("P")) //noinspection ResultOfMethodCallIgnored
+            if (x.equalsIgnoreCase("P")) //no inspection ResultOfMethodCallIgnored
                 ForkJoinPool.getCommonPoolParallelism();
     }
 
